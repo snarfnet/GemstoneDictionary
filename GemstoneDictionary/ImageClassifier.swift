@@ -41,48 +41,47 @@ enum ImageClassifier {
     /// a defined object region (not uniform background), and moderate brightness.
     private static func estimateStoneLikelihood(_ m: ScanMetrics) -> Int {
         var score = 0.0
+        var penalties = 0.0
 
-        // Saturation: stones typically have noticeable color (unless clear/white)
-        // Very low saturation = skin, paper, walls
-        if m.saturation > 20 {
-            score += min(25, m.saturation * 0.5)
-        } else if m.saturation > 10 {
-            score += 8
-        }
-
-        // Coverage: a stone should occupy a defined area, not fill the entire frame uniformly
-        // Very low = no distinct object, very high = uniform surface (wall, floor)
-        if m.coverageScore >= 15 && m.coverageScore <= 85 {
+        // 1. Saturation: stones have distinct color. Skin/walls/paper are low saturation.
+        if m.saturation > 30 {
             score += 25
-        } else if m.coverageScore > 85 {
-            score += 5  // Likely a uniform surface, not a stone
+        } else if m.saturation > 18 {
+            score += 12
         } else {
-            score += 8
+            penalties += 15  // Very desaturated = unlikely stone
         }
 
-        // Brightness: stones are rarely pitch black or blown out white
-        if m.brightness > 15 && m.brightness < 85 {
-            score += 20
+        // 2. Coverage: stone should be a distinct object (20-75% of frame)
+        // Too low = no object, too high = uniform surface
+        if m.coverageScore >= 20 && m.coverageScore <= 75 {
+            score += 25
         } else {
-            score += 5
+            penalties += 20
         }
 
-        // Clarity: some translucency is a strong gemstone indicator
-        if m.clarityScore > 40 {
+        // 3. Brightness: stones are moderate brightness, not extreme
+        if m.brightness > 20 && m.brightness < 80 {
             score += 15
         } else {
-            score += 5
+            penalties += 10
         }
 
-        // Color consistency: stones have focused hue, not a random mix
-        // The level score already captures color quality
-        if m.levelScore > 40 {
-            score += 15
-        } else {
-            score += 5
+        // 4. Clarity + Level combined: real stones have some color quality
+        if m.clarityScore > 50 && m.levelScore > 50 {
+            score += 25  // Strong stone indicator
+        } else if m.clarityScore > 35 || m.levelScore > 35 {
+            score += 10
         }
 
-        return Int(min(100, max(0, round(score))))
+        // 5. Color variance penalty: if saturation is very uniform and low,
+        // it's likely a solid-color non-stone surface
+        if m.saturation < 15 && m.brightness > 30 && m.brightness < 70 {
+            penalties += 25  // Gray/beige surfaces (desks, skin, walls)
+        }
+
+        let result = score - penalties
+        return Int(min(100, max(0, round(result))))
     }
 
     private static func analyze(_ image: UIImage, reference: SizeReference) -> ScanMetrics {

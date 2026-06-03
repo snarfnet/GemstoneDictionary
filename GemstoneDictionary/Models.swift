@@ -34,7 +34,7 @@ struct ScanMetrics {
     var estimatedMillimeters: Int?
     var stoneLikelihood: Int = 50
 
-    var isLikelyStone: Bool { stoneLikelihood >= 35 }
+    var isLikelyStone: Bool { stoneLikelihood >= 50 }
 
     var stoneLikelihoodLabel: String {
         switch stoneLikelihood {
