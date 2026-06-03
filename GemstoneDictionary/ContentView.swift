@@ -345,6 +345,19 @@ struct ContentView: View {
             .frame(height: 300)
             .clipShape(RoundedRectangle(cornerRadius: 8))
 
+            if let m = scanMetrics, !m.isLikelyStone {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                    Text(m.stoneLikelihoodLabel)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.orange)
+                }
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+            }
+
             HStack(spacing: 10) {
                 Button {
                     toggleLiveScanning()
