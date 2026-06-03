@@ -24,7 +24,7 @@ struct CollectionView: View {
                     collectionGrid
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.top, 14)
             .padding(.bottom, 26)
             .frame(maxWidth: 700)
@@ -157,7 +157,7 @@ struct CollectionView: View {
     }
 
     private var collectionGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150, maximum: 240))], spacing: 12) {
             ForEach(items) { item in
                 CollectionItemCard(item: item, onTapStone: { stone in
                     selectedStone = stone
@@ -220,9 +220,12 @@ private struct CollectionItemCard: View {
                                 .font(.subheadline.weight(.bold))
                                 .foregroundStyle(AppStyle.ink)
                                 .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                             Text(en ? stone.name : stone.kana)
                                 .font(.caption2)
                                 .foregroundStyle(AppStyle.muted)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                         }
                         Spacer()
                     }

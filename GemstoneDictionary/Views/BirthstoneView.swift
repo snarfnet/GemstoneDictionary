@@ -18,7 +18,7 @@ struct BirthstoneView: View {
                     selectedMonthCard(info)
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.top, 14)
             .padding(.bottom, 26)
             .frame(maxWidth: 700)
@@ -40,8 +40,10 @@ struct BirthstoneView: View {
                 .font(.caption.weight(.black))
                 .foregroundStyle(AppStyle.turquoise)
             Text(en ? "Birthstones" : "誕生石")
-                .font(.system(size: 32, weight: .black, design: .serif))
+                .font(.system(size: 28, weight: .black, design: .serif))
                 .foregroundStyle(AppStyle.ink)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
             Text(en
                 ? "Discover the gemstone of your birth month and its meaning."
                 : "生まれ月の石と意味を探してみましょう。")
@@ -57,7 +59,7 @@ struct BirthstoneView: View {
     }
 
     private var monthGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 68, maximum: 100))], spacing: 10) {
             ForEach(1...12, id: \.self) { month in
                 MonthCell(
                     month: month,
@@ -109,7 +111,7 @@ struct BirthstoneView: View {
                 }
             }
         }
-        .padding(18)
+        .padding(12)
         .background(AppStyle.panel, in: RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
         .shadow(color: .black.opacity(0.06), radius: 12, y: 6)
@@ -179,9 +181,13 @@ private struct BirthstoneRow: View {
                 Text(en ? stone.englishName : stone.name)
                     .font(.headline)
                     .foregroundStyle(AppStyle.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                 Text(en ? stone.name : stone.englishName)
                     .font(.caption)
                     .foregroundStyle(AppStyle.muted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             Spacer()
             Image(systemName: "chevron.right")
@@ -242,7 +248,7 @@ struct StoneDetailSheet: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
                 }
             }
-            .padding(16)
+            .padding(12)
         }
         .background(AppStyle.background.ignoresSafeArea())
         .navigationTitle(en ? stone.englishName : stone.name)

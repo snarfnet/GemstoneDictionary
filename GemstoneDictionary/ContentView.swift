@@ -139,7 +139,7 @@ struct ContentView: View {
                         }
                         selectedStoneDetail
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 12)
                     .padding(.top, 14)
                     .padding(.bottom, 26)
                     .frame(maxWidth: 700)
@@ -260,8 +260,10 @@ struct ContentView: View {
                         .font(.caption.weight(.black))
                         .foregroundStyle(AppStyle.turquoise)
                     Text("天然石辞典")
-                        .font(.system(size: 44, weight: .black, design: .serif))
+                        .font(.system(size: 36, weight: .black, design: .serif))
                         .foregroundStyle(AppStyle.ink)
+                        .minimumScaleFactor(0.8)
+                        .lineLimit(1)
                 }
                 Spacer()
                 Text("\(GemstoneDatabase.stones.count)種")
@@ -390,7 +392,7 @@ struct ContentView: View {
                     .lineSpacing(3)
             }
         }
-        .padding(16)
+        .padding(12)
         .background(AppStyle.panel, in: RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
     }
@@ -601,9 +603,11 @@ struct ContentView: View {
                             Text(candidate.gemstone.name)
                                 .font(.headline)
                                 .foregroundStyle(AppStyle.ink)
-                            HStack(spacing: 6) {
-                                MiniInfoLabel(title: "ランク", value: candidate.gemstone.rankRange)
-                                MiniInfoLabel(title: "透明度", value: candidate.gemstone.shortTransparency)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 6) {
+                                    MiniInfoLabel(title: "ランク", value: candidate.gemstone.rankRange)
+                                    MiniInfoLabel(title: "透明度", value: candidate.gemstone.shortTransparency)
+                                }
                             }
                             Text(candidate.gemstone.marketPrice)
                                 .font(.subheadline)
@@ -746,11 +750,13 @@ struct ContentView: View {
                                     .font(.caption.weight(.bold))
                                     .foregroundStyle(AppStyle.muted)
                             }
-                            HStack(spacing: 6) {
-                                MiniInfoLabel(title: "一致", value: "\(entry.score)%")
-                                MiniInfoLabel(title: "レベル", value: entry.levelLabel)
-                                MiniInfoLabel(title: "サイズ", value: entry.sizeLabel)
-                                MiniInfoLabel(title: "信頼度", value: entry.sizeConfidenceLabel)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 6) {
+                                    MiniInfoLabel(title: "一致", value: "\(entry.score)%")
+                                    MiniInfoLabel(title: "レベル", value: entry.levelLabel)
+                                    MiniInfoLabel(title: "サイズ", value: entry.sizeLabel)
+                                    MiniInfoLabel(title: "信頼度", value: entry.sizeConfidenceLabel)
+                                }
                             }
                             Text("基準物: \(entry.referenceLabel)")
                                 .font(.caption2.weight(.semibold))
@@ -1032,7 +1038,7 @@ struct ContentView: View {
                 .background(AppStyle.panel, in: RoundedRectangle(cornerRadius: 8))
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
             }
-            .padding(16)
+            .padding(12)
             .frame(maxWidth: 700)
             .frame(maxWidth: .infinity)
         }
@@ -1473,8 +1479,10 @@ struct StoneDetailView: View {
                         .font(.caption.weight(.black))
                         .foregroundStyle(AppStyle.turquoise)
                     Text(stone.name)
-                        .font(.system(size: 36, weight: .black, design: .serif))
+                        .font(.system(size: 32, weight: .black, design: .serif))
                         .foregroundStyle(AppStyle.ink)
+                        .minimumScaleFactor(0.8)
+                        .lineLimit(1)
                     Text(stone.englishName)
                         .font(.headline)
                         .foregroundStyle(AppStyle.muted)
@@ -1521,7 +1529,7 @@ struct StoneDetailView: View {
             TextBlock(title: "扱い方", text: stone.care)
             TextBlock(title: "メモ", text: stone.note)
         }
-        .padding(16)
+        .padding(12)
         .background(AppStyle.panel, in: RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
     }

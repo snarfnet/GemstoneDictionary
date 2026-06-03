@@ -23,7 +23,7 @@ struct CompatibilityView: View {
                     resultCard(result)
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.top, 14)
             .padding(.bottom, 26)
             .frame(maxWidth: 700)
@@ -95,9 +95,13 @@ struct CompatibilityView: View {
                     Text(en ? stone.englishName : stone.name)
                         .font(.headline)
                         .foregroundStyle(AppStyle.ink)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
                     Text(en ? stone.name : stone.kana)
                         .font(.caption)
                         .foregroundStyle(AppStyle.muted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 Spacer()
                 Picker("", selection: selectedID) {
@@ -204,7 +208,9 @@ struct CompatibilityView: View {
                         Text(en ? "Shared Effects" : "共通の効果")
                             .font(.caption.weight(.bold))
                             .foregroundStyle(AppStyle.ink)
-                            .frame(width: 90, alignment: .leading)
+                            .frame(width: 72, alignment: .leading)
+                            .minimumScaleFactor(0.8)
+                            .lineLimit(1)
                         Text(shared.joined(separator: "・"))
                             .font(.caption)
                             .foregroundStyle(AppStyle.muted)
@@ -214,7 +220,7 @@ struct CompatibilityView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(18)
+        .padding(12)
         .background(AppStyle.panel, in: RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
         .shadow(color: .black.opacity(0.06), radius: 12, y: 6)
@@ -230,6 +236,7 @@ struct CompatibilityView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(AppStyle.ink)
                 .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
     }
 

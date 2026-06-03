@@ -36,7 +36,7 @@ struct PowerStoneView: View {
                 effectGrid
                 stonesSection
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.top, 14)
             .padding(.bottom, 26)
             .frame(maxWidth: 700)
@@ -75,7 +75,7 @@ struct PowerStoneView: View {
     }
 
     private var effectGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 72, maximum: 120))], spacing: 10) {
             ForEach(effects, id: \.ja) { effect in
                 EffectCell(
                     label: en ? effect.en : effect.ja,
@@ -111,7 +111,7 @@ struct PowerStoneView: View {
                     .foregroundStyle(AppStyle.muted)
                     .padding(16)
             } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150, maximum: 240))], spacing: 10) {
                     ForEach(filteredStones) { stone in
                         PowerStoneCard(stone: stone, highlightEffect: selectedEffect == "すべて" ? nil : selectedEffect) {
                             selectedStone = stone
@@ -172,10 +172,12 @@ private struct PowerStoneCard: View {
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(AppStyle.ink)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                         Text(en ? stone.name : stone.kana)
                             .font(.caption2)
                             .foregroundStyle(AppStyle.muted)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
 
