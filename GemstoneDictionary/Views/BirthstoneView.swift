@@ -21,6 +21,8 @@ struct BirthstoneView: View {
             .padding(.horizontal, 16)
             .padding(.top, 14)
             .padding(.bottom, 26)
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
         }
         .background(AppStyle.background.ignoresSafeArea())
         .navigationTitle(en ? "Birthstones" : "誕生石")

@@ -39,6 +39,8 @@ struct PowerStoneView: View {
             .padding(.horizontal, 16)
             .padding(.top, 14)
             .padding(.bottom, 26)
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
         }
         .background(AppStyle.background.ignoresSafeArea())
         .navigationTitle(en ? "Power Stones" : "パワーストーン効果検索")

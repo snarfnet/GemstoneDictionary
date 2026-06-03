@@ -142,6 +142,8 @@ struct ContentView: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 14)
                     .padding(.bottom, 26)
+                    .frame(maxWidth: 700)
+                    .frame(maxWidth: .infinity)
                 }
                 .background(AppStyle.background.ignoresSafeArea())
                 .navigationBarTitleDisplayMode(.inline)
@@ -1031,6 +1033,8 @@ struct ContentView: View {
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppStyle.line))
             }
             .padding(16)
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
         }
         .background(AppStyle.background.ignoresSafeArea())
     }

@@ -27,6 +27,8 @@ struct CollectionView: View {
             .padding(.horizontal, 16)
             .padding(.top, 14)
             .padding(.bottom, 26)
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
         }
         .background(AppStyle.background.ignoresSafeArea())
         .navigationTitle(en ? "My Collection" : "マイコレクション")
