@@ -131,7 +131,9 @@ struct ContentView: View {
                     VStack(spacing: 16) {
                         header
                         scanCard
-                        if !candidates.isEmpty {
+                        if let m = scanMetrics, !m.isLikelyStone {
+                            notStoneWarning(m)
+                        } else if !candidates.isEmpty {
                             candidateSection
                         }
                         if !scanHistory.isEmpty {
@@ -535,6 +537,27 @@ struct ContentView: View {
 
     private var liveStabilityLabel: String {
         liveStableCount >= 2 ? "安定表示 \(liveStableCount)回" : "確認中"
+    }
+
+    private func notStoneWarning(_ metrics: ScanMetrics) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 36))
+                .foregroundStyle(.orange)
+            Text(metrics.stoneLikelihoodLabel)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.white)
+            Text(Locale.preferredLanguages.first?.hasPrefix("en") == true
+                ? "The camera could not detect a gemstone. Try placing the stone on a white background in natural light."
+                : "天然石を検出できませんでした。白い背景の上に石を置き、自然光で撮影してください。")
+                .font(.system(size: 14))
+                .foregroundStyle(.white.opacity(0.7))
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
     private func metricsPanel(_ metrics: ScanMetrics) -> some View {

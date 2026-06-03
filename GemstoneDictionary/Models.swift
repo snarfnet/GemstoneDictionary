@@ -32,6 +32,22 @@ struct ScanMetrics {
     var levelScore: Int
     var coverageScore: Int
     var estimatedMillimeters: Int?
+    var stoneLikelihood: Int = 50
+
+    var isLikelyStone: Bool { stoneLikelihood >= 35 }
+
+    var stoneLikelihoodLabel: String {
+        switch stoneLikelihood {
+        case 70...100: return isEnglish() ? "Likely a gemstone" : "天然石の可能性が高い"
+        case 50..<70: return isEnglish() ? "Possibly a gemstone" : "天然石かもしれません"
+        case 35..<50: return isEnglish() ? "Low confidence" : "判定の確信度が低い"
+        default: return isEnglish() ? "Unlikely a gemstone" : "天然石ではない可能性があります"
+        }
+    }
+
+    private func isEnglish() -> Bool {
+        Locale.preferredLanguages.first?.hasPrefix("en") == true
+    }
 
     var clarityLabel: String {
         switch clarityScore {

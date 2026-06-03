@@ -21,12 +21,68 @@ enum SizeReference: String, CaseIterable, Identifiable {
 
 enum ImageClassifier {
     static func classify(_ image: UIImage, reference: SizeReference) -> (metrics: ScanMetrics, candidates: [StoneCandidate]) {
-        let metrics = analyze(image, reference: reference)
+        var metrics = analyze(image, reference: reference)
+        metrics.stoneLikelihood = estimateStoneLikelihood(metrics)
+
+        // If unlikely to be a stone, return empty candidates
+        guard metrics.isLikelyStone else {
+            return (metrics, [])
+        }
+
         let candidates = GemstoneDatabase.stones
             .map { StoneCandidate(gemstone: $0, score: score($0, metrics: metrics)) }
             .sorted { $0.score > $1.score }
             .prefix(5)
         return (metrics, Array(candidates))
+    }
+
+    /// Estimates how likely the subject is a gemstone (0-100) based on visual characteristics.
+    /// Real gemstones tend to have: moderate-high saturation, distinct hue concentration,
+    /// a defined object region (not uniform background), and moderate brightness.
+    private static func estimateStoneLikelihood(_ m: ScanMetrics) -> Int {
+        var score = 0.0
+
+        // Saturation: stones typically have noticeable color (unless clear/white)
+        // Very low saturation = skin, paper, walls
+        if m.saturation > 20 {
+            score += min(25, m.saturation * 0.5)
+        } else if m.saturation > 10 {
+            score += 8
+        }
+
+        // Coverage: a stone should occupy a defined area, not fill the entire frame uniformly
+        // Very low = no distinct object, very high = uniform surface (wall, floor)
+        if m.coverageScore >= 15 && m.coverageScore <= 85 {
+            score += 25
+        } else if m.coverageScore > 85 {
+            score += 5  // Likely a uniform surface, not a stone
+        } else {
+            score += 8
+        }
+
+        // Brightness: stones are rarely pitch black or blown out white
+        if m.brightness > 15 && m.brightness < 85 {
+            score += 20
+        } else {
+            score += 5
+        }
+
+        // Clarity: some translucency is a strong gemstone indicator
+        if m.clarityScore > 40 {
+            score += 15
+        } else {
+            score += 5
+        }
+
+        // Color consistency: stones have focused hue, not a random mix
+        // The level score already captures color quality
+        if m.levelScore > 40 {
+            score += 15
+        } else {
+            score += 5
+        }
+
+        return Int(min(100, max(0, round(score))))
     }
 
     private static func analyze(_ image: UIImage, reference: SizeReference) -> ScanMetrics {
